@@ -20,7 +20,7 @@ Download vhost-user volume plugin from (http://github.com/dong-liuliu/vhostuser-
 Run the plugin also with the vhost-user directory parameter.
 
 ```bash
-./vhostuser-docker-volume -p /var/run/kata-containers/vhost-user/ &
+./vhostuser-docker-volume -path /var/run/kata-containers/vhost-user/ &
 ```
 
 Then the volume plugin will create the vhost-user directory and related sub-directories:
@@ -47,7 +47,7 @@ As described previously, vhost-user target application is not controlled by this
 - setup env and start SPDK target by:
   
   ```bash
-  $ sudo HUGEMEM=4096 scripts/setup.sh
+  $ sudo HUGEMEM=4096 PCI_WHITELIST="none" scripts/setup.sh
   $ sudo app/spdk_tgt/spdk_tgt -S /var/run/kata-containers/vhost-user/block/sockets/ &
   ```
 
@@ -127,4 +127,10 @@ $ docker volume inspect volume0
 
 ```bash
 $ docker run --runtime kata-runtime --volume-driver=vhostuser-docker-volume -v volume0:/data -ti busybox sh
+```
+- Check the data volume inside container
+
+```bash
+$ ls -l /data
+$ blockdev --getsize64 /data
 ```
